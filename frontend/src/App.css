@@ -1,21 +1,23 @@
-/* Orynx AI Labs Video Platform Styles */
+/* Orynx AI Labs Video Platform - Mobile-First Styles */
 .App {
   font-family: 'Roboto', 'Arial', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - thinner for mobile */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #3b82f6;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -23,10 +25,6 @@
 }
 
 /* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-track {
-  background: #2d2d2d;
-}
-
 .dark ::-webkit-scrollbar-thumb {
   background: #3b82f6;
 }
@@ -53,15 +51,28 @@
   overflow: hidden;
 }
 
-/* Hover animations */
-.group:hover img {
-  transform: scale(1.02);
-  transition: transform 0.2s ease-in-out;
+/* Touch-friendly interactions */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Custom focus styles */
+/* Improved hover effects for mobile */
+@media (hover: hover) {
+  .group:hover img {
+    transform: scale(1.02);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .group:hover .aspect-video {
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+  }
+}
+
+/* Custom focus styles - larger for mobile */
 button:focus,
-input:focus {
+input:focus,
+select:focus {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
@@ -71,88 +82,104 @@ input:focus {
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-/* Video thumbnail hover effect */
-.group:hover .aspect-video {
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
-}
-
-/* Mobile optimizations */
-@media (max-width: 640px) {
-  /* Reduce padding on mobile */
-  .mobile-padding {
-    padding: 0.75rem;
+/* Mobile-specific optimizations */
+@media (max-width: 767px) {
+  /* Prevent zoom on form inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="url"],
+  select,
+  textarea {
+    font-size: 16px !important;
   }
   
-  /* Stack elements vertically on mobile */
-  .mobile-stack {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  /* Full width buttons on mobile */
-  .mobile-full {
-    width: 100%;
-  }
-}
-
-/* Responsive video grid */
-@media (max-width: 640px) {
-  .video-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 768px) {
-  .video-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .video-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-@media (min-width: 1025px) {
-  .video-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-/* Admin panel specific styles */
-.admin-form {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-/* Video player responsive */
-@media (max-width: 768px) {
-  .video-player {
-    border-radius: 0.5rem;
-  }
-}
-
-/* Touch-friendly buttons */
-@media (max-width: 768px) {
+  /* Optimize touch targets */
+  button,
   .touch-button {
     min-height: 44px;
     min-width: 44px;
   }
-}
-
-/* Safe area handling for mobile */
-@supports (padding: max(0px)) {
-  .safe-area-inset {
-    padding-left: max(1rem, env(safe-area-inset-left));
-    padding-right: max(1rem, env(safe-area-inset-right));
+  
+  /* Better spacing for mobile */
+  .mobile-spacing {
+    padding: 12px 16px;
+  }
+  
+  /* Full-width mobile buttons */
+  .mobile-full-button {
+    width: 100%;
+    padding: 12px 16px;
+  }
+  
+  /* Reduce margins on mobile */
+  .mobile-compact {
+    margin: 8px 0;
+  }
+  
+  /* Better video grid for mobile */
+  .mobile-video-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 12px;
   }
 }
 
-/* Loading animation */
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1024px) {
+  .desktop-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+}
+
+/* Safe area handling for mobile devices */
+@supports (padding: max(0px)) {
+  .safe-area-top {
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  
+  .safe-area-left {
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+  
+  .safe-area-right {
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+/* Orynx brand colors and gradients */
+.orynx-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.orynx-primary {
+  background-color: #3b82f6;
+}
+
+.orynx-primary-hover:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.orynx-text {
+  color: #3b82f6;
+}
+
+/* Loading animations */
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -162,29 +189,33 @@ input:focus {
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Custom Orynx brand colors */
-.orynx-primary {
-  background-color: #3b82f6;
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
 }
 
-.orynx-primary-hover:hover {
-  background-color: #2563eb;
-}
-
-.orynx-text {
-  color: #3b82f6;
-}
-
-/* YouTube embed responsive */
+/* YouTube embed responsive container */
 .youtube-container {
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 .youtube-container iframe {
@@ -193,4 +224,160 @@ input:focus {
   left: 0;
   width: 100%;
   height: 100%;
+  border: none;
+}
+
+/* Mobile video player optimizations */
+@media (max-width: 767px) {
+  .mobile-video-player {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .mobile-video-player iframe {
+    border-radius: 8px;
+  }
+}
+
+/* Better button styles for mobile */
+.mobile-button {
+  padding: 12px 20px;
+  border-radius: 24px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.mobile-button:active {
+  transform: scale(0.98);
+}
+
+/* Enhanced sidebar for mobile */
+.mobile-sidebar {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Better form inputs for mobile */
+.mobile-input {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.5;
+  border: 2px solid #e5e7eb;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.mobile-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Improved category pills for mobile */
+.category-pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s ease-in-out;
+  touch-action: manipulation;
+}
+
+.category-pill:active {
+  transform: scale(0.95);
+}
+
+/* Better video card hover effects */
+.video-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+@media (hover: hover) {
+  .video-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Improved admin dashboard for mobile */
+.admin-card {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.dark .admin-card {
+  border-color: #374151;
+  background: #1f2937;
+}
+
+/* Better responsive text sizing */
+@media (max-width: 767px) {
+  .responsive-text-lg {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  
+  .responsive-text-xl {
+    font-size: 20px;
+    line-height: 1.3;
+  }
+  
+  .responsive-text-2xl {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+}
+
+/* Optimized grid layouts */
+.responsive-grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (max-width: 767px) {
+  .responsive-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Dark mode improvements */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    background-color: #111827;
+    color: #f9fafb;
+  }
 }
