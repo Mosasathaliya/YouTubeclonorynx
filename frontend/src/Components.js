@@ -711,65 +711,106 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo, isMobile }) 
 
       {/* Add Video Form */}
       {showAddForm && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 border border-gray-200 dark:border-gray-700">
-          <h2 className={`font-semibold mb-4 ${isMobile ? 'text-lg' : 'text-xl'}`}>Add New Video</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 border border-gray-200 dark:border-gray-700 shadow-lg">
+          <div className="flex items-center space-x-2 mb-4">
+            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <h2 className={`font-semibold ${isMobile ? 'text-lg' : 'text-xl'}`}>Add YouTube Video</h2>
+          </div>
+          
+          {/* Instructions */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
+            <div className="flex items-start space-x-2">
+              <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p className="text-sm font-medium text-blue-800 dark:text-blue-200">How to add videos:</p>
+                <ul className="text-xs text-blue-700 dark:text-blue-300 mt-1 space-y-1">
+                  <li>• Copy any YouTube video URL (e.g., youtube.com/watch?v=...)</li>
+                  <li>• Paste it in the YouTube URL field below</li>
+                  <li>• Add a custom title and select category</li>
+                  <li>• Video will be playable for all users immediately!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           <form onSubmit={handleAddVideo} className="space-y-4">
             <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 sm:grid-cols-2 gap-4'}`}>
               <div>
-                <label className="block text-sm font-medium mb-2">Video Title</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Video Title *
+                </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="Enter video title"
-                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
+                  placeholder="Enter an engaging video title"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-700 dark:text-white touch-manipulation transition-all"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">YouTube URL</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  YouTube URL *
+                </label>
                 <input
                   type="url"
                   value={formData.youtubeUrl}
                   onChange={(e) => setFormData({ ...formData, youtubeUrl: e.target.value })}
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
+                  placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-700 dark:text-white touch-manipulation transition-all"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Channel Name</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Channel Name
+                </label>
                 <input
                   type="text"
                   value={formData.channel}
                   onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
-                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
+                  placeholder="Orynx AI Labs"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-700 dark:text-white touch-manipulation transition-all"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
+                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Category
+                </label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:bg-gray-700 dark:text-white touch-manipulation transition-all"
                 >
-                  <option value="Technology">Technology</option>
-                  <option value="Education">Education</option>
-                  <option value="Entertainment">Entertainment</option>
-                  <option value="Gaming">Gaming</option>
-                  <option value="Music">Music</option>
-                  <option value="Cooking">Cooking</option>
-                  <option value="Travel">Travel</option>
+                  <option value="Technology">🔬 Technology</option>
+                  <option value="Education">📚 Education</option>
+                  <option value="Entertainment">🎭 Entertainment</option>
+                  <option value="Gaming">🎮 Gaming</option>
+                  <option value="Music">🎵 Music</option>
+                  <option value="Cooking">👨‍🍳 Cooking</option>
+                  <option value="Travel">✈️ Travel</option>
                 </select>
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition-colors touch-manipulation"
-            >
-              Add Video
-            </button>
+            
+            <div className="flex items-center space-x-3 pt-2">
+              <button
+                type="submit"
+                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-lg transition-all touch-manipulation font-medium shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+              >
+                <span className="flex items-center justify-center space-x-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>Add Video to Platform</span>
+                </span>
+              </button>
+            </div>
           </form>
         </div>
       )}
