@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 
-// Default Mock Data (will be supplemented by admin-added videos)
+// Default Mock Data
 const defaultMockVideos = [
   {
     id: 'default_1',
-    title: 'Welcome to Orynx AI Labs - Introduction Video',
+    title: 'Welcome to Orynx AI Labs - Revolutionary AI Technology',
     thumbnail: 'https://customer-assets.emergentagent.com/job_tubedup-8/artifacts/jg7im862_2c195611-aa8c-44cb-b6b4-368711a32fc0.png',
     channel: 'Orynx AI Labs',
     channelAvatar: 'https://customer-assets.emergentagent.com/job_tubedup-8/artifacts/jg7im862_2c195611-aa8c-44cb-b6b4-368711a32fc0.png',
-    views: '10K',
+    views: '15K',
     timestamp: '1 day ago',
-    duration: '5:30',
+    duration: '8:45',
     category: 'Technology',
-    youtubeId: 'dQw4w9WgXcQ', // Sample YouTube ID
+    youtubeId: 'dQw4w9WgXcQ',
     isDefault: true
   },
   {
     id: 'default_2',
-    title: 'AI Technology Trends 2025',
+    title: 'AI Innovation Summit 2025 - Future of Technology',
     thumbnail: 'https://images.unsplash.com/photo-1526915303387-35900bc4ff33',
     channel: 'Orynx Research',
     channelAvatar: 'https://customer-assets.emergentagent.com/job_tubedup-8/artifacts/jg7im862_2c195611-aa8c-44cb-b6b4-368711a32fc0.png',
-    views: '25K',
+    views: '32K',
     timestamp: '3 days ago',
-    duration: '12:45',
+    duration: '15:30',
     category: 'Technology',
     youtubeId: 'dQw4w9WgXcQ',
     isDefault: true
@@ -38,7 +38,7 @@ const extractYouTubeId = (url) => {
   return match ? match[1] : null;
 };
 
-// Header Component
+// Mobile-First Header Component
 export const Header = ({ 
   sidebarOpen, 
   setSidebarOpen, 
@@ -46,105 +46,165 @@ export const Header = ({
   setSearchQuery, 
   isAdmin, 
   onAdminLogin, 
-  onAdminLogout 
+  onAdminLogout,
+  isMobile 
 }) => {
   const navigate = useNavigate();
+  const [showSearch, setShowSearch] = useState(false);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/?search=${encodeURIComponent(searchQuery)}`);
+      if (isMobile) setShowSearch(false);
     }
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-50 h-14">
-      <div className="flex items-center justify-between px-3 sm:px-4 h-full">
-        {/* Left section */}
-        <div className="flex items-center space-x-2 sm:space-x-4">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full lg:block hidden"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <Link to="/" className="flex items-center space-x-2">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_tubedup-8/artifacts/jg7im862_2c195611-aa8c-44cb-b6b4-368711a32fc0.png" 
-              alt="Orynx AI Labs" 
-              className="w-8 h-8 object-contain"
-            />
-            <div className="hidden sm:block">
-              <span className="text-lg font-bold text-blue-500">ORYNX</span>
-              <div className="text-xs text-gray-600 dark:text-gray-400 -mt-1">AI LABS</div>
-            </div>
-          </Link>
-        </div>
+    <>
+      <header className="fixed top-0 left-0 right-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-50 h-14">
+        <div className="flex items-center justify-between px-3 h-full">
+          {/* Left section */}
+          <div className="flex items-center space-x-2">
+            {!isMobile && (
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            )}
+            
+            <Link to="/" className="flex items-center space-x-2 py-1">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_tubedup-8/artifacts/jg7im862_2c195611-aa8c-44cb-b6b4-368711a32fc0.png" 
+                alt="Orynx AI Labs" 
+                className="w-7 h-7 object-contain"
+              />
+              <div className={isMobile ? 'hidden xs:block' : 'block'}>
+                <div className="text-base font-bold text-blue-500 leading-none">ORYNX</div>
+                <div className="text-[10px] text-gray-600 dark:text-gray-400 leading-none">AI LABS</div>
+              </div>
+            </Link>
+          </div>
 
-        {/* Center section - Search */}
-        <div className="flex-1 max-w-2xl mx-2 sm:mx-8">
-          <form onSubmit={handleSearch} className="flex">
-            <div className="flex-1 flex">
+          {/* Center section - Search (Desktop) / Search Icon (Mobile) */}
+          {isMobile ? (
+            <button
+              onClick={() => setShowSearch(true)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          ) : (
+            <div className="flex-1 max-w-xl mx-6">
+              <form onSubmit={handleSearch} className="flex">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search videos..."
+                  className="flex-1 px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-l-full focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                />
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-gray-50 dark:bg-gray-800 border border-l-0 border-gray-300 dark:border-gray-600 rounded-r-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </form>
+            </div>
+          )}
+
+          {/* Right section */}
+          <div className="flex items-center space-x-1">
+            {isMobile && (
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            )}
+            
+            {isAdmin ? (
+              <div className="flex items-center space-x-1">
+                <Link 
+                  to="/admin"
+                  className="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-full transition-colors"
+                >
+                  {isMobile ? 'A' : 'Admin'}
+                </Link>
+                <button
+                  onClick={onAdminLogout}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+                  title="Logout"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={onAdminLogin}
+                className="px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-xs rounded-full transition-colors"
+              >
+                {isMobile ? 'A' : 'Admin'}
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Search Overlay */}
+      {isMobile && showSearch && (
+        <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 pt-14">
+          <div className="p-4">
+            <form onSubmit={handleSearch} className="flex items-center space-x-3">
+              <button
+                type="button"
+                onClick={() => setShowSearch(false)}
+                className="p-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+              </button>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search videos..."
-                className="w-full px-3 sm:px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-l-full focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full focus:outline-none focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+                autoFocus
               />
               <button
                 type="submit"
-                className="px-3 sm:px-6 py-2 bg-gray-50 dark:bg-gray-800 border border-l-0 border-gray-300 dark:border-gray-600 rounded-r-full hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="p-3 bg-blue-500 text-white rounded-full"
               >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
-            </div>
-          </form>
-        </div>
-
-        {/* Right section */}
-        <div className="flex items-center space-x-1 sm:space-x-2">
-          {isAdmin ? (
-            <>
-              <Link 
-                to="/admin"
-                className="hidden sm:block px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-full transition-colors"
-              >
-                Admin
-              </Link>
-              <button
-                onClick={onAdminLogout}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-xs sm:text-sm"
-                title="Logout"
-              >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={onAdminLogin}
-              className="px-2 sm:px-3 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-xs sm:text-sm rounded-full transition-colors"
-            >
-              Admin
-            </button>
-          )}
-          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-xs sm:text-sm">
-            A
+            </form>
           </div>
         </div>
-      </div>
-    </header>
+      )}
+    </>
   );
 };
 
-// Sidebar Component (Mobile Optimized)
-export const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
+// Mobile-Optimized Sidebar Component
+export const Sidebar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
   const menuItems = [
     { name: 'Home', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', active: true, path: '/' },
     { name: 'Trending', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', path: '/' },
@@ -157,9 +217,10 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (window.innerWidth < 1024 && sidebarOpen) {
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar && !sidebar.contains(event.target) && !event.target.closest('button[data-sidebar-toggle]')) {
+      if (isMobile && sidebarOpen) {
+        const sidebar = document.getElementById('mobile-sidebar');
+        const trigger = document.querySelector('[data-sidebar-trigger]');
+        if (sidebar && !sidebar.contains(event.target) && !trigger?.contains(event.target)) {
           setSidebarOpen(false);
         }
       }
@@ -167,76 +228,118 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [sidebarOpen, setSidebarOpen]);
+  }, [sidebarOpen, setSidebarOpen, isMobile]);
 
+  if (isMobile) {
+    return (
+      <>
+        {/* Mobile Overlay */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+        
+        {/* Mobile Sidebar */}
+        <aside 
+          id="mobile-sidebar"
+          className={`fixed left-0 top-14 bottom-0 w-72 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-300 z-50 ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          <nav className="p-3 h-full overflow-y-auto">
+            {menuItems.map((item, index) => (
+              <Link
+                key={index}
+                to={item.path}
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center space-x-4 px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 mb-1 transition-colors ${
+                  item.active ? 'bg-gray-100 dark:bg-gray-800' : ''
+                }`}
+              >
+                <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                </svg>
+                <span className="font-medium">{item.name}</span>
+              </Link>
+            ))}
+            
+            <hr className="my-4 border-gray-200 dark:border-gray-700" />
+            
+            <div className="px-3 py-2">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Quick Access</h3>
+              <div className="space-y-2">
+                <Link to="/" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">O</span>
+                  </div>
+                  <span className="text-sm">Orynx AI Labs</span>
+                </Link>
+              </div>
+            </div>
+          </nav>
+        </aside>
+      </>
+    );
+  }
+
+  // Desktop Sidebar
   return (
-    <>
-      {/* Mobile Overlay */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-      
-      {/* Sidebar */}
-      <aside 
-        id="sidebar"
-        className={`fixed left-0 top-14 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 z-40 ${
-          sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0 lg:w-16'
-        }`}
-      >
-        <nav className="p-2">
-          {menuItems.map((item, index) => (
-            <Link
-              key={index}
-              to={item.path}
-              onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
-              className={`flex items-center space-x-6 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 mb-1 ${
-                item.active ? 'bg-gray-100 dark:bg-gray-800' : ''
-              }`}
-            >
-              <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-              </svg>
-              {(sidebarOpen || window.innerWidth >= 1024) && (
-                <span className="text-sm font-medium">{item.name}</span>
-              )}
-            </Link>
-          ))}
-        </nav>
-      </aside>
-    </>
+    <aside className={`fixed left-0 top-14 h-[calc(100vh-3.5rem)] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 z-40 ${
+      sidebarOpen ? 'w-64' : 'w-16'
+    }`}>
+      <nav className="p-2 h-full overflow-y-auto">
+        {menuItems.map((item, index) => (
+          <Link
+            key={index}
+            to={item.path}
+            className={`flex items-center space-x-6 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 mb-1 transition-colors ${
+              item.active ? 'bg-gray-100 dark:bg-gray-800' : ''
+            }`}
+          >
+            <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+            </svg>
+            {sidebarOpen && <span className="text-sm font-medium">{item.name}</span>}
+          </Link>
+        ))}
+      </nav>
+    </aside>
   );
 };
 
-// Video Card Component (Mobile Optimized)
-const VideoCard = ({ video }) => {
+// Mobile-Optimized Video Card Component
+const VideoCard = ({ video, isMobile }) => {
   return (
     <Link to={`/watch/${video.id}`} className="group block">
-      <div className="space-y-2 sm:space-y-3">
+      <div className={`space-y-2 ${isMobile ? 'pb-4' : 'pb-0'}`}>
         <div className="relative">
           <img
             src={video.thumbnail}
             alt={video.title}
-            className="w-full aspect-video object-cover rounded-lg sm:rounded-xl group-hover:rounded-lg transition-all duration-200"
+            className="w-full aspect-video object-cover rounded-lg group-hover:rounded-md transition-all duration-200"
+            loading="lazy"
           />
-          <span className="absolute bottom-1 sm:bottom-2 right-1 sm:right-2 bg-black bg-opacity-80 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[10px] sm:text-xs">
+          <span className="absolute bottom-2 right-2 bg-black bg-opacity-80 text-white text-xs px-2 py-1 rounded font-medium">
             {video.duration}
           </span>
         </div>
-        <div className="flex space-x-2 sm:space-x-3">
+        <div className="flex space-x-3">
           <img
             src={video.channelAvatar}
             alt={video.channel}
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex-shrink-0 object-cover"
+            className="w-9 h-9 rounded-full flex-shrink-0 object-cover"
+            loading="lazy"
           />
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-sm leading-5 line-clamp-2 group-hover:text-blue-600 transition-colors">
+            <h3 className={`font-semibold leading-5 line-clamp-2 group-hover:text-blue-600 transition-colors ${
+              isMobile ? 'text-sm' : 'text-sm'
+            }`}>
               {video.title}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mt-1">{video.channel}</p>
-            <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
+            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{video.channel}</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
               {video.views} views • {video.timestamp}
             </p>
           </div>
@@ -246,35 +349,42 @@ const VideoCard = ({ video }) => {
   );
 };
 
-// Home Page Component (Mobile Optimized)
-export const HomePage = ({ searchQuery, videos = [] }) => {
+// Mobile-First Home Page Component
+export const HomePage = ({ searchQuery, videos = [], isMobile }) => {
   const allVideos = [...defaultMockVideos, ...videos];
   const [filteredVideos, setFilteredVideos] = useState(allVideos);
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   useEffect(() => {
+    let filtered = allVideos;
+    
     if (searchQuery) {
-      const filtered = allVideos.filter(video =>
+      filtered = filtered.filter(video =>
         video.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         video.channel.toLowerCase().includes(searchQuery.toLowerCase()) ||
         video.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredVideos(filtered);
-    } else {
-      setFilteredVideos(allVideos);
     }
-  }, [searchQuery, videos]);
+    
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(video => video.category === selectedCategory);
+    }
+    
+    setFilteredVideos(filtered);
+  }, [searchQuery, videos, selectedCategory]);
 
   const categories = ['All', 'Technology', 'Gaming', 'Music', 'Education', 'Cooking', 'Travel', 'Entertainment'];
 
   return (
-    <div className="p-3 sm:p-6">
-      {/* Category Pills (Mobile Optimized) */}
-      <div className="flex space-x-2 sm:space-x-3 mb-4 sm:mb-6 overflow-x-auto pb-2 scrollbar-hide">
+    <div className={`${isMobile ? 'p-3' : 'p-6'}`}>
+      {/* Category Pills */}
+      <div className={`flex space-x-2 mb-4 overflow-x-auto pb-2 scrollbar-hide ${isMobile ? 'px-1' : ''}`}>
         {categories.map((category, index) => (
           <button
             key={index}
-            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
-              index === 0
+            onClick={() => setSelectedCategory(category)}
+            className={`px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 touch-manipulation ${
+              selectedCategory === category
                 ? 'bg-blue-500 text-white dark:bg-blue-600'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
             }`}
@@ -284,27 +394,35 @@ export const HomePage = ({ searchQuery, videos = [] }) => {
         ))}
       </div>
 
-      {/* Video Grid (Mobile Optimized) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+      {/* Video Grid */}
+      <div className={`grid gap-4 ${
+        isMobile 
+          ? 'grid-cols-1' 
+          : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+      }`}>
         {filteredVideos.map((video) => (
-          <VideoCard key={video.id} video={video} />
+          <VideoCard key={video.id} video={video} isMobile={isMobile} />
         ))}
       </div>
 
       {filteredVideos.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400">No videos found. Try a different search term.</p>
+          <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          <p className="text-gray-500 dark:text-gray-400">No videos found</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Try a different search term or category</p>
         </div>
       )}
     </div>
   );
 };
 
-// YouTube Player Component
-const YouTubePlayer = ({ videoId, title }) => {
+// Mobile-Optimized YouTube Player Component
+const YouTubePlayer = ({ videoId, title, isMobile }) => {
   if (!videoId) {
     return (
-      <div className="aspect-video bg-gray-900 flex items-center justify-center rounded-xl overflow-hidden">
+      <div className="aspect-video bg-gray-900 flex items-center justify-center rounded-lg overflow-hidden">
         <div className="text-center text-white">
           <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 24 24">
             <path d="M8 5v14l11-7z"/>
@@ -316,14 +434,14 @@ const YouTubePlayer = ({ videoId, title }) => {
   }
 
   return (
-    <div className="aspect-video rounded-xl overflow-hidden">
+    <div className={`aspect-video ${isMobile ? 'rounded-lg' : 'rounded-xl'} overflow-hidden`}>
       <iframe
         width="100%"
         height="100%"
-        src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`}
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1`}
         title={title}
         frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
         className="w-full h-full"
       ></iframe>
@@ -331,55 +449,61 @@ const YouTubePlayer = ({ videoId, title }) => {
   );
 };
 
-// Video Page Component (Mobile Optimized)
-export const VideoPage = ({ videos = [] }) => {
+// Mobile-First Video Page Component
+export const VideoPage = ({ videos = [], isMobile }) => {
   const { videoId } = useParams();
   const allVideos = [...defaultMockVideos, ...videos];
   const video = allVideos.find(v => v.id === videoId) || allVideos[0];
-  const relatedVideos = allVideos.filter(v => v.id !== videoId).slice(0, 8);
+  const relatedVideos = allVideos.filter(v => v.id !== videoId).slice(0, isMobile ? 6 : 8);
 
   return (
-    <div className="flex flex-col xl:flex-row p-3 sm:p-6 space-y-4 xl:space-y-0 xl:space-x-6">
+    <div className={`${isMobile ? 'flex flex-col' : 'flex flex-col xl:flex-row'} ${isMobile ? 'p-0' : 'p-6'} ${isMobile ? 'space-y-4' : 'space-y-6 xl:space-y-0 xl:space-x-6'}`}>
       {/* Main Video Section */}
       <div className="flex-1">
         {/* Video Player */}
-        <div className="mb-4">
-          <YouTubePlayer videoId={video.youtubeId} title={video.title} />
+        <div className={isMobile ? 'mb-3' : 'mb-4'}>
+          <YouTubePlayer videoId={video.youtubeId} title={video.title} isMobile={isMobile} />
         </div>
 
-        {/* Video Info (Mobile Optimized) */}
-        <div className="space-y-3 sm:space-y-4">
-          <h1 className="text-lg sm:text-xl font-semibold leading-tight">{video.title}</h1>
+        {/* Video Info */}
+        <div className={`space-y-3 ${isMobile ? 'px-3' : ''}`}>
+          <h1 className={`font-semibold leading-tight ${isMobile ? 'text-base' : 'text-xl'}`}>
+            {video.title}
+          </h1>
           
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-            <div className="flex items-center space-x-3 sm:space-x-4">
-              <img src={video.channelAvatar} alt={video.channel} className="w-10 h-10 rounded-full object-cover" />
-              <div>
-                <p className="font-semibold text-sm sm:text-base">{video.channel}</p>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">1.2M subscribers</p>
+          <div className={`flex ${isMobile ? 'flex-col space-y-3' : 'flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0'}`}>
+            <div className="flex items-center space-x-3">
+              <img 
+                src={video.channelAvatar} 
+                alt={video.channel} 
+                className="w-10 h-10 rounded-full object-cover" 
+              />
+              <div className="flex-1">
+                <p className="font-semibold text-sm">{video.channel}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">1.2M subscribers</p>
               </div>
-              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 sm:px-6 sm:py-2 rounded-full font-medium transition-colors text-sm">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full font-medium transition-colors text-sm touch-manipulation">
                 Subscribe
               </button>
             </div>
             
-            <div className="flex items-center space-x-2 overflow-x-auto">
+            <div className="flex items-center space-x-2 overflow-x-auto pb-2">
               <div className="flex bg-gray-100 dark:bg-gray-800 rounded-full flex-shrink-0">
-                <button className="flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-l-full transition-colors">
+                <button className="flex items-center space-x-2 px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-l-full transition-colors touch-manipulation">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-3M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                   </svg>
                   <span className="text-sm">125K</span>
                 </button>
                 <div className="w-px bg-gray-300 dark:bg-gray-600"></div>
-                <button className="px-2 sm:px-4 py-1.5 sm:py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-r-full transition-colors">
+                <button className="px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-r-full transition-colors touch-manipulation">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 13l3 3 7-7" />
                   </svg>
                 </button>
               </div>
               
-              <button className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-colors flex-shrink-0">
+              <button className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-2 rounded-full transition-colors flex-shrink-0 touch-manipulation">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                 </svg>
@@ -388,23 +512,22 @@ export const VideoPage = ({ videos = [] }) => {
             </div>
           </div>
 
-          {/* Description (Mobile Optimized) */}
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-3 sm:p-4">
+          {/* Description */}
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
             <p className="text-sm font-semibold">
               {video.views} views • {video.timestamp}
             </p>
             <p className="text-sm mt-2 text-gray-700 dark:text-gray-300 leading-relaxed">
-              Welcome to Orynx AI Labs! In this video, we explore cutting-edge AI technology and innovations. 
-              Make sure to subscribe for more amazing content about artificial intelligence, machine learning, 
-              and the future of technology.
+              Welcome to Orynx AI Labs! Discover the future of artificial intelligence and cutting-edge technology. 
+              Subscribe for more content about AI innovation, machine learning breakthroughs, and tech insights.
             </p>
           </div>
 
-          {/* Comments Section (Mobile Optimized) */}
-          <div className="space-y-3 sm:space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
-              <p className="text-base sm:text-lg font-semibold">1,234 Comments</p>
-              <button className="flex items-center space-x-2 text-sm self-start">
+          {/* Comments Section */}
+          <div className="space-y-3">
+            <div className="flex items-center space-x-4">
+              <p className="font-semibold">1,234 Comments</p>
+              <button className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                 </svg>
@@ -412,7 +535,7 @@ export const VideoPage = ({ videos = [] }) => {
               </button>
             </div>
             
-            {/* Comment Input (Mobile Optimized) */}
+            {/* Comment Input */}
             <div className="flex space-x-3">
               <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
                 A
@@ -429,20 +552,21 @@ export const VideoPage = ({ videos = [] }) => {
         </div>
       </div>
 
-      {/* Sidebar - Related Videos (Mobile Optimized) */}
-      <div className="w-full xl:w-96 space-y-3">
-        <h3 className="font-semibold mb-4 text-base sm:text-lg">Up next</h3>
+      {/* Related Videos */}
+      <div className={`${isMobile ? 'px-3' : 'w-full xl:w-96'} space-y-3`}>
+        <h3 className="font-semibold">Up next</h3>
         {relatedVideos.map((relatedVideo) => (
           <Link
             key={relatedVideo.id}
             to={`/watch/${relatedVideo.id}`}
-            className="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors"
+            className="flex space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors touch-manipulation"
           >
             <div className="relative flex-shrink-0">
               <img
                 src={relatedVideo.thumbnail}
                 alt={relatedVideo.title}
-                className="w-32 sm:w-40 aspect-video object-cover rounded-lg"
+                className={`${isMobile ? 'w-32' : 'w-40'} aspect-video object-cover rounded-lg`}
+                loading="lazy"
               />
               <span className="absolute bottom-1 right-1 bg-black bg-opacity-80 text-white text-xs px-1 py-0.5 rounded text-[10px]">
                 {relatedVideo.duration}
@@ -464,8 +588,8 @@ export const VideoPage = ({ videos = [] }) => {
   );
 };
 
-// Admin Login Component
-export const AdminLogin = ({ onLogin, onClose, isModal = false }) => {
+// Mobile-Optimized Admin Login Component
+export const AdminLogin = ({ onLogin, onClose, isModal = false, isMobile }) => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
@@ -481,7 +605,7 @@ export const AdminLogin = ({ onLogin, onClose, isModal = false }) => {
   };
 
   const content = (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+    <div className={`bg-white dark:bg-gray-800 rounded-lg p-6 w-full ${isMobile ? 'max-w-sm mx-4' : 'max-w-md'}`}>
       <h2 className="text-2xl font-bold mb-4 text-center">Admin Login</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -494,15 +618,15 @@ export const AdminLogin = ({ onLogin, onClose, isModal = false }) => {
               setError('');
             }}
             placeholder="Enter admin code"
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+            className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
             required
           />
           {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
         </div>
-        <div className="flex space-x-3">
+        <div className={`flex ${isMobile ? 'flex-col space-y-2' : 'space-x-3'}`}>
           <button
             type="submit"
-            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors"
+            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg transition-colors touch-manipulation"
           >
             Login
           </button>
@@ -510,7 +634,7 @@ export const AdminLogin = ({ onLogin, onClose, isModal = false }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg transition-colors"
+              className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-3 px-4 rounded-lg transition-colors touch-manipulation"
             >
               Cancel
             </button>
@@ -535,8 +659,8 @@ export const AdminLogin = ({ onLogin, onClose, isModal = false }) => {
   );
 };
 
-// Admin Dashboard Component
-export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
+// Mobile-Optimized Admin Dashboard Component
+export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo, isMobile }) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -574,12 +698,12 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
   };
 
   return (
-    <div className="p-4 sm:p-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <h1 className="text-2xl font-bold mb-4 sm:mb-0">Admin Dashboard</h1>
+    <div className={isMobile ? 'p-3' : 'p-6'}>
+      <div className={`flex ${isMobile ? 'flex-col space-y-3' : 'flex-col sm:flex-row sm:items-center sm:justify-between'} mb-6`}>
+        <h1 className={`font-bold ${isMobile ? 'text-xl' : 'text-2xl'}`}>Admin Dashboard</h1>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg transition-colors touch-manipulation"
         >
           {showAddForm ? 'Cancel' : 'Add Video'}
         </button>
@@ -587,10 +711,10 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
 
       {/* Add Video Form */}
       {showAddForm && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 sm:p-6 mb-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold mb-4">Add New Video</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 border border-gray-200 dark:border-gray-700">
+          <h2 className={`font-semibold mb-4 ${isMobile ? 'text-lg' : 'text-xl'}`}>Add New Video</h2>
           <form onSubmit={handleAddVideo} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className={`grid ${isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 sm:grid-cols-2 gap-4'}`}>
               <div>
                 <label className="block text-sm font-medium mb-2">Video Title</label>
                 <input
@@ -598,7 +722,7 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="Enter video title"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
                   required
                 />
               </div>
@@ -609,7 +733,7 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
                   value={formData.youtubeUrl}
                   onChange={(e) => setFormData({ ...formData, youtubeUrl: e.target.value })}
                   placeholder="https://www.youtube.com/watch?v=..."
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
                   required
                 />
               </div>
@@ -619,7 +743,7 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
                   type="text"
                   value={formData.channel}
                   onChange={(e) => setFormData({ ...formData, channel: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
                   required
                 />
               </div>
@@ -628,7 +752,7 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white touch-manipulation"
                 >
                   <option value="Technology">Technology</option>
                   <option value="Education">Education</option>
@@ -642,7 +766,7 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
             </div>
             <button
               type="submit"
-              className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors"
+              className="w-full bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition-colors touch-manipulation"
             >
               Add Video
             </button>
@@ -652,38 +776,47 @@ export const AdminDashboard = ({ videos, onAddVideo, onDeleteVideo }) => {
 
       {/* Videos List */}
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold">Manage Videos ({videos.length})</h2>
+        <div className={`${isMobile ? 'p-4' : 'p-6'} border-b border-gray-200 dark:border-gray-700`}>
+          <h2 className={`font-semibold ${isMobile ? 'text-lg' : 'text-xl'}`}>
+            Manage Videos ({videos.length})
+          </h2>
         </div>
         {videos.length === 0 ? (
           <div className="p-6 text-center text-gray-500 dark:text-gray-400">
-            No videos added yet. Add your first video above.
+            <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            <p>No videos added yet</p>
+            <p className="text-sm mt-1">Add your first video above</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {videos.map((video) => (
-              <div key={video.id} className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div key={video.id} className={`${isMobile ? 'p-4' : 'p-6'} ${isMobile ? 'space-y-3' : 'flex items-center space-x-4'}`}>
                 <img
                   src={video.thumbnail}
                   alt={video.title}
-                  className="w-full sm:w-32 aspect-video object-cover rounded-lg flex-shrink-0"
+                  className={`${isMobile ? 'w-full' : 'w-32'} aspect-video object-cover rounded-lg flex-shrink-0`}
+                  loading="lazy"
                 />
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-lg mb-2 line-clamp-2">{video.title}</h3>
+                  <h3 className={`font-semibold line-clamp-2 mb-2 ${isMobile ? 'text-base' : 'text-lg'}`}>
+                    {video.title}
+                  </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Channel: {video.channel}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Category: {video.category}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Added: {video.timestamp}</p>
                 </div>
-                <div className="flex space-x-2 flex-shrink-0">
+                <div className={`flex ${isMobile ? 'space-x-2 w-full' : 'space-x-2'} flex-shrink-0`}>
                   <Link
                     to={`/watch/${video.id}`}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                    className={`bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation ${isMobile ? 'flex-1 text-center' : ''}`}
                   >
                     View
                   </Link>
                   <button
                     onClick={() => onDeleteVideo(video.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                    className={`bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation ${isMobile ? 'flex-1' : ''}`}
                   >
                     Delete
                   </button>

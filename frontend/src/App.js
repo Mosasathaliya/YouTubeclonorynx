@@ -4,11 +4,23 @@ import './App.css';
 import { Header, Sidebar, HomePage, VideoPage, AdminLogin, AdminDashboard } from './Components';
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Default closed on mobile
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [videos, setVideos] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Check admin status on load
   useEffect(() => {
@@ -26,17 +38,11 @@ function App() {
 
   // Handle screen size changes for sidebar
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024) {
-        setSidebarOpen(false);
-      } else {
-        setSidebarOpen(true);
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    if (window.innerWidth >= 1024) {
+      setSidebarOpen(true);
+    } else {
+      setSidebarOpen(false);
+    }
   }, []);
 
   const adminLogin = (code) => {
@@ -67,7 +73,7 @@ function App() {
   };
 
   return (
-    <div className="App bg-white dark:bg-gray-900 min-h-screen">
+    <div className="App bg-white dark:bg-gray-900 min-h-screen overflow-x-hidden">
       <BrowserRouter>
         <Header 
           sidebarOpen={sidebarOpen}
@@ -77,22 +83,36 @@ function App() {
           isAdmin={isAdmin}
           onAdminLogin={() => setShowAdminLogin(true)}
           onAdminLogout={adminLogout}
+          isMobile={isMobile}
         />
-        <div className="flex">
-          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'} ml-0 mt-14`}>
+        
+        <div className="flex relative">
+          <Sidebar 
+            sidebarOpen={sidebarOpen} 
+            setSidebarOpen={setSidebarOpen}
+            isMobile={isMobile}
+          />
+          
+          <main className={`flex-1 transition-all duration-300 ${
+            isMobile 
+              ? 'ml-0 mt-14' 
+              : sidebarOpen 
+                ? 'ml-64 mt-14' 
+                : 'ml-16 mt-14'
+          }`}>
             <Routes>
-              <Route path="/" element={<HomePage searchQuery={searchQuery} videos={videos} />} />
-              <Route path="/watch/:videoId" element={<VideoPage videos={videos} />} />
+              <Route path="/" element={<HomePage searchQuery={searchQuery} videos={videos} isMobile={isMobile} />} />
+              <Route path="/watch/:videoId" element={<VideoPage videos={videos} isMobile={isMobile} />} />
               <Route path="/admin" element={
                 isAdmin ? (
                   <AdminDashboard 
                     videos={videos}
                     onAddVideo={addVideo}
                     onDeleteVideo={deleteVideo}
+                    isMobile={isMobile}
                   />
                 ) : (
-                  <AdminLogin onLogin={adminLogin} />
+                  <AdminLogin onLogin={adminLogin} isMobile={isMobile} />
                 )
               } />
             </Routes>
@@ -105,6 +125,7 @@ function App() {
             onLogin={adminLogin} 
             onClose={() => setShowAdminLogin(false)}
             isModal={true}
+            isMobile={isMobile}
           />
         )}
       </BrowserRouter>
